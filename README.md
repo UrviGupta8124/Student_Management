@@ -5,7 +5,6 @@ A simple **Spring Boot** application for managing student data.
 This project demonstrates **CRUD operations**, **database integration**, and a **RESTful API** structure using **Java**, **Spring Boot**, and **MySQL**.
 
 
-
 ## Features
 
 - Add, update, delete, and view student records
@@ -99,7 +98,13 @@ src/
 screenshots/
 ```
 
+## Project Status
 
+⚡ Ongoing / Work in Progress
+
+## Demo
+
+Demo Video: [Youtube](https://www.youtube.com/your-video-link)
 
 ## Contribution
 
@@ -112,4 +117,3 @@ Make sure to follow standard Java and Spring Boot coding conventions.
 
 This project is open-source and free to use.
 
-```
