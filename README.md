@@ -104,7 +104,7 @@ screenshots/
 
 ## Demo
 
-Demo Video: [Youtube](https://www.youtube.com/your-video-link)
+Demo Video: [Youtube]([https://www.youtube.com/your-video-link](https://youtu.be/yZBviLkuYvI))
 
 ## Contribution
 
