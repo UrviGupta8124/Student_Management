@@ -1,0 +1,528 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+  <title>Add Student</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <h1>Add Student</h1>
+  <form id="studentForm">
+    <input type="text" id="name" placeholder="Name" required><br>
+    <input type="email" id="email" placeholder="Email" required><br>
+    <input type="text" id="course" placeholder="Course" required><br>
+    <button type="submit">Add Student</button>
+  </form>
+
+  <script>
+    document.getElementById("studentForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const student = {
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value,
+        course: document.getElementById("course").value
+      };
+
+      await fetch("/students", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(student)
+      });
+
+      alert("Student added!");
+      window.location.href = "students.html";
+    });
+  </script>
+</body>
+</html> -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Student - Student Management System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: 
+                url('image.png') no-repeat center center fixed;
+    background-size: cover;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
+}
+
+        .form-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        .form-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1, #f9ca24);
+            background-size: 400% 400%;
+            animation: gradient 3s ease infinite;
+        }
+
+        @keyframes gradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: #7f8c8d;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e1e8ed;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .form-group input:focus + .focus-line,
+        .form-group select:focus + .focus-line {
+            transform: scaleX(1);
+        }
+
+        .form-group.focused label {
+            color: #667eea;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #bbb;
+            font-size: 1.1rem;
+            pointer-events: none;
+        }
+
+        .form-group input:focus ~ .input-icon {
+            color: #667eea;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(79, 172, 254, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn.loading {
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        .btn.loading::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            margin: auto;
+            border: 2px solid transparent;
+            border-top-color: #ffffff;
+            border-radius: 50%;
+            animation: spin 1s ease infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .success-message {
+            background: linear-gradient(135deg, #4ecdc4, #44a08d);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: none;
+            animation: slideInDown 0.5s ease-out;
+            text-align: center;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: #764ba2;
+            transform: translateX(-5px);
+        }
+
+        .floating-shapes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .shape1 {
+            width: 60px;
+            height: 60px;
+            top: 15%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+
+        .shape2 {
+            width: 40px;
+            height: 40px;
+            top: 70%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-15px) rotate(120deg); }
+            66% { transform: translateY(10px) rotate(240deg); }
+        }
+
+        @media (max-width: 768px) {
+            .form-container {
+                padding: 30px 20px;
+                margin: 10px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <div class="floating-shapes">
+            <div class="shape shape1"></div>
+            <div class="shape shape2"></div>
+        </div>
+        
+        <a href="#" class="back-link" onclick="goBack()">
+            ← Back to Dashboard
+        </a>
+        
+        <h1>Add New Student</h1>
+        <p class="subtitle">Enter student information below</p>
+        
+        <div class="success-message" id="successMessage">
+            ✅ Student added successfully!
+        </div>
+        
+        <form id="addStudentForm">
+            <div class="form-group">
+                <label for="name">Student Name</label>
+                <input type="text" id="name" name="name" required>
+                <span class="input-icon">👤</span>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required>
+                <span class="input-icon">📧</span>
+            </div>
+            
+            <div class="form-group">
+                <label for="course">Course</label>
+                <select id="course" name="course" required>
+                    <option value="">Select a course</option>
+                    <option value="computer-science">Computer Science</option>
+                    <option value="mathematics">Mathematics</option>
+                    <option value="physics">Physics</option>
+                    <option value="chemistry">Chemistry</option>
+                    <option value="biology">Biology</option>
+                    <option value="engineering">Engineering</option>
+                    <option value="business">Business Administration</option>
+                    <option value="psychology">Psychology</option>
+                    <option value="english">English Literature</option>
+                    <option value="history">History</option>
+                    <option value="other">Other</option>
+                </select>
+                <span class="input-icon">📚</span>
+            </div>
+            
+            <button type="submit" class="btn" id="submitBtn">
+                Add Student
+            </button>
+        </form>
+    </div>
+
+    <script>
+        // Form handling
+        const form = document.getElementById('addStudentForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const successMessage = document.getElementById('successMessage');
+
+        // Add focus effects to form groups
+        document.querySelectorAll('.form-group input, .form-group select').forEach(input => {
+            input.addEventListener('focus', () => {
+                input.closest('.form-group').classList.add('focused');
+            });
+            
+            input.addEventListener('blur', () => {
+                if (!input.value) {
+                    input.closest('.form-group').classList.remove('focused');
+                }
+            });
+        });
+
+        // Form submission
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(form);
+            const studentData = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                course: formData.get('course')
+            };
+            
+            // Add loading state
+            submitBtn.classList.add('loading');
+            submitBtn.textContent = 'Adding Student...';
+            
+            // Simulate API call
+            //here
+        //     try {
+        //         await new Promise(resolve => setTimeout(resolve, 1500));
+                
+        //         // Show success message
+        //         successMessage.style.display = 'block';
+                
+        //         // Log the data (in real app, this would be sent to your backend)
+        //         console.log('Student added:', studentData);
+                
+        //         // Reset form
+        //         form.reset();
+        //         document.querySelectorAll('.form-group').forEach(group => {
+        //             group.classList.remove('focused');
+        //         });
+                
+        //         // Hide success message after 3 seconds
+        //         setTimeout(() => {
+        //             successMessage.style.display = 'none';
+        //         }, 3000);
+                
+        //     } catch (error) {
+        //         console.error('Error adding student:', error);
+        //         alert('Error adding student. Please try again.');
+        //     } finally {
+        //         // Remove loading state
+        //         submitBtn.classList.remove('loading');
+        //         submitBtn.textContent = 'Add Student';
+        //     }
+        // });
+        // Call backend API
+            try {
+                const response = await fetch("http://localhost:8080/students", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(studentData)
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to add student");
+                }
+
+                // Show success message
+                successMessage.style.display = 'block';
+
+                // Reset form
+                form.reset();
+                document.querySelectorAll('.form-group').forEach(group => {
+                    group.classList.remove('focused');
+                });
+
+                // Hide success message after 3 seconds
+                setTimeout(() => {
+                    successMessage.style.display = 'none';
+                }, 3000);
+
+            } catch (error) {
+                console.error('Error adding student:', error);
+                alert('Error adding student. Please try again.');
+            } finally {
+                // Remove loading state
+                submitBtn.classList.remove('loading');
+                submitBtn.textContent = 'Add Student';
+            }
+});
+
+        // Back button functionality
+        function goBack() {
+            // if (confirm('Are you sure you want to go back? Any unsaved changes will be lost.')) {
+            //     // In a real app, this would navigate back to the main page
+            //     alert('Navigating back to dashboard...');
+            // }
+              if (confirm('Are you sure you want to go back? Any unsaved changes will be lost.')) {
+                window.location.href = "index.html";
+    }
+        }
+
+        // Real-time email validation
+        const emailInput = document.getElementById('email');
+        emailInput.addEventListener('input', () => {
+            const email = emailInput.value;
+            if (email && !email.includes('@')) {
+                emailInput.style.borderColor = '#ff6b6b';
+            } else {
+                emailInput.style.borderColor = '#e1e8ed';
+            }
+        });
+
+        // Add some interactive animations
+        document.querySelectorAll('.form-group input, .form-group select').forEach(input => {
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && input.type !== 'submit') {
+                    e.preventDefault();
+                    const inputs = Array.from(document.querySelectorAll('input, select'));
+                    const currentIndex = inputs.indexOf(input);
+                    const nextInput = inputs[currentIndex + 1];
+                    if (nextInput) {
+                        nextInput.focus();
+                    } else {
+                        submitBtn.focus();
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
